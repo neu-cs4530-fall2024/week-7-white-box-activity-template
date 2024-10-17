@@ -1,5 +1,5 @@
 
-# week-8-white-box-testing-activity-starter
+# week-7-white-box-testing-activity-starter
 
 For instructions for Week 8 White Box Testing activity, refer to [Instructions.md](./Instructions.md).
 
