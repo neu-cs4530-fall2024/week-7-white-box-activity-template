@@ -1,7 +1,7 @@
 
 # week-7-white-box-testing-activity-starter
 
-For instructions for Week 8 White Box Testing activity, refer to [Instructions.md](./Instructions.md).
+For instructions for Week 7 White Box Testing activity, refer to [Instructions.md](./Instructions.md).
 
 Continue reading for generic STS commands. 
 Run `npm install` now if you haven't already. 
