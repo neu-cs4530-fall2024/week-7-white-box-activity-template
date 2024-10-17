@@ -1,8 +1,8 @@
 {
-  "name": "week8-white-box-testing-starter",
+  "name": "week7-white-box-testing-starter",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/week8-white-box-testing-starter.js",
+  "main": "dist/week7-white-box-testing-starter.js",
   "entry": [
     "./src/index.ts"
   ],

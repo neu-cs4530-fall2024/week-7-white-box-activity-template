@@ -1,5 +1,5 @@
 
-# Week 8 Activity - White Box Testing
+# Week 7 Activity - White Box Testing
 
 Welcome back, fellow Software Engineers!
 Last week you helped us find 7 bugs in our calculator implementation.
