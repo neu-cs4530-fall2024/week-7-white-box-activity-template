@@ -28,7 +28,7 @@ Some interesting things to note:
 - About coverage: 
   - We have more than 80% line, function, and statement coverage, but the branch coverage is only ~23%
   - This indicates that a large portion of our logic is concentrated in a few methods (which are untested).
-- About the test summary:
+- About the test summary (Don't worry about the numbers in screenshots being different):
   - `Tests:       2 todo, 69 passed, 71 total` 
   - There are 2 tests marked as TODO.
     - This is a jest feature which allows to create placeholders to implement tests later.
