@@ -11,25 +11,33 @@ export abstract class AbstractCalculatorState implements ICalculatorState {
     return this._data.display();
   }
 
-  protected add(firstNumber: number, secondNumber: number): number {
+  public get context(): IContext {
+    return this._context;
+  }
+
+  public get data(): IStateData {
+    return this._data;
+  }
+
+  public add(firstNumber: number, secondNumber: number): number {
     const result: number = firstNumber + secondNumber;
     this._context.notify(`${firstNumber} + ${secondNumber} = ${result}`);
     return result;
   }
 
-  protected subtract(firstNumber: number, secondNumber: number): number {
+  public subtract(firstNumber: number, secondNumber: number): number {
     const result: number = (firstNumber - secondNumber);
     this._context.notify(`${firstNumber} - ${secondNumber} = ${result}`);
     return result;
   }
 
-  protected multiply(firstNumber: number, secondNumber: number): number {
+  public multiply(firstNumber: number, secondNumber: number): number {
     const result: number = (firstNumber * secondNumber);
     this._context.notify(`${firstNumber} * ${secondNumber} = ${result}`);
     return result;
   }
 
-  protected divide(firstNumber: number, secondNumber: number): number {
+  public divide(firstNumber: number, secondNumber: number): number {
     const result: number = (firstNumber / secondNumber);
     this._context.notify(`${firstNumber} / ${secondNumber} = ${result}`);
     return result;

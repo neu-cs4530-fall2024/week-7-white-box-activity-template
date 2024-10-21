@@ -19,7 +19,7 @@
   const gradeForNewBranchesCovered = {
     score: 0,
     name: 'New Branches Covered',
-    output: `New branches covered: 0/10`,
+    output: `New branches covered: 0/20`,
     status: 'passed'
   }
 
@@ -30,8 +30,8 @@
     let newBranchesCovered = coverage.total.branches.covered - 24;
     let newTestsAdded = testSummary.numPassedTests - 69;
 
-    if (newBranchesCovered > 10) {
-      newBranchesCovered = 10;
+    if (newBranchesCovered > 20) {
+      newBranchesCovered = 20;
     } else if (newBranchesCovered < 0) {
       newBranchesCovered = 0;
     }
@@ -45,8 +45,8 @@
     gradeForNewTestsAdded.score = newTestsAdded * 5;
     gradeForNewTestsAdded.output = `New tests added: ${newTestsAdded}/10`;
 
-    gradeForNewBranchesCovered.score = newBranchesCovered * 5;
-    gradeForNewBranchesCovered.output = `New branches covered: ${newBranchesCovered}/10`;
+    gradeForNewBranchesCovered.score = newBranchesCovered * 2.5;
+    gradeForNewBranchesCovered.output = `New branches covered: ${newBranchesCovered}/20`;
 
   }
 

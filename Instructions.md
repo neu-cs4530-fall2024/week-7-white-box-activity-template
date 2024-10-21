@@ -9,7 +9,7 @@ Staying true to the promise of preparing you for the real world, we have decided
 Although the developer put in efforts to write some tests, the branch coverage on your calculator stands at an abysmal 23%.
 This is simply unacceptable and we are counting on you to save the day once again.
 
-- Your task for today, is to write 10 new tests in `entering-second-number.state.spec.ts` to cover 10 new branches in `entering-second-number.state.ts`.
+- Your task for today, is to write 10 new tests in `entering-second-number.state.spec.ts` to cover 20 new branches in `entering-second-number.state.ts`.
 
 ## About the code
 
@@ -24,11 +24,17 @@ So lets get started on that.
 You should see the below output:
 ![coverage](img/coverage.png)
 
+The html report of the coverage can be found at `reports/coverage/lcov-report/index.html` and looks as below:
+![coverage html all](img/coverage-html-all.png)
+
+You can navigate to different files in the report to see which branches have not been covered yet:
+![coverage html file](img/coverage-html-file.png)
+
 Some interesting things to note:
 - About coverage: 
   - We have more than 80% line, function, and statement coverage, but the branch coverage is only ~23%
   - This indicates that a large portion of our logic is concentrated in a few methods (which are untested).
-- About the test summary (Don't worry about the numbers in screenshots being different):
+- About the test summary:
   - `Tests:       2 todo, 69 passed, 71 total` 
   - There are 2 tests marked as TODO.
     - This is a jest feature which allows to create placeholders to implement tests later.
@@ -39,15 +45,172 @@ Some interesting things to note:
 Your task today is to write tests for the 2 methods that have the `todo` tests.
 The methods are `binaryOperator()` and `equals()` in `entering-second-number.state.ts`.
 The tests are found in the corresponding `entering-second-number.state.spec.ts` file.
-Within the spec files, find methods named `it.todo` and replace them with your own test suite with 10 new tests that cover 10 new branches.
+Within the spec files, find methods named `it.todo` and replace them with your own test suite with 10 new tests that cover 20 new branches.
+
+### Writing your first test
+
+Navigate to the test suite for `binaryOperator()` in `entering-second-number.state.spec.ts`.
+On line 83, you should see the following code (replace it.todo with actual tests):
+```typescript
+describe('binaryOperator()', (): void => {
+  it.todo('should do something');
+});
+```
+
+### Code we want to test
+
+Consider the code for `binaryOperator()` in `entering-second-number.state.spec.ts`.
+
+```typescript
+public binaryOperator(operator: OperatorKeys): void {
+    switch (operator) {
+      case OperatorKeys.PLUS: // in case of + or - after having entered two numbers, apply the first operator and stay in this state
+      case OperatorKeys.MINUS: // (or go to ErrorState in case of division by zero)
+        this.evaluateWhenLowPrecedenceNext(operator);
+      // ...
+```
+
+When the second operator entered is either "PLUS" or "MINUS", we invoke `evaluateWhenLowPrecedenceNext()`.
+
+Consider the code for `evaluateWhenLowPrecedenceNext()`:
+
+```typescript
+private evaluateWhenLowPrecedenceNext(nextOperator: OperatorKeys): void {
+    const firstNumber: number = parseFloat(
+      this._data.firstBuffer === '' ? '0' : this._data.firstBuffer
+    );
+    const secondNumber: number = parseFloat(
+      this._data.secondBuffer === '' ? '0' : this._data.secondBuffer
+    );
+
+    switch (this._data.firstOperator) {
+      case OperatorKeys.PLUS:
+        this._data.firstBuffer = this.add(firstNumber, secondNumber).toString();
+        break;
+      // ...
+    }
+    this._data.secondBuffer = '';
+    this._data.firstOperator = nextOperator;
+}
+```
+
+### Assumptions for the first test
+
+Let us assume the following when writing the first test:
+- First number entered is 1.
+- First operator entered is PLUS.
+- Second number entered is 1.
+- Second operator entered is PLUS.
+- The method `add()` will give us the correct result (2).
+
+### Expected outcomes
+
+- `add()` should be invoked with 2 arguments (1, 1).
+- `firstBuffer` should have the value "2".
+- `secondBuffer` should be an empty string.
+- `firstOperator` should have the operation PLUS. 
+
+### Lets the write the test
+
+Lets start by converting the `it.todo` to describe the scenario we are testing
+
+```typescript
+it('should convert to 1+1 to 2+', (): void => {
+
+});
+```
+
+Let us begin by setting up the data for our test:
+
+```typescript
+it('should convert to 1+1 to 2+ when the next operator is +', (): void => {
+  enteringSecondNumberState.data.firstBuffer = '1';
+  enteringSecondNumberState.data.firstOperator = OperatorKeys.PLUS;
+  enteringSecondNumberState.data.secondBuffer = '1';
+});
+```
+
+Next, let us create a stub for `add()` that returns true:
+
+```typescript
+it('should convert to 1+1 to 2+ when the next operator is +', (): void => {
+
+  enteringSecondNumberState.data.firstBuffer = '1';
+  enteringSecondNumberState.data.firstOperator = OperatorKeys.PLUS;
+  enteringSecondNumberState.data.secondBuffer = '1';
+  
+  jest.spyOn(enteringSecondNumberState, 'add').mockReturnValue(2);
+
+
+});
+```
+
+Now we can invoke the method under test:
+
+```typescript
+it('should convert to 1+1 to 2+ when the next operator is +', (): void => {
+
+  enteringSecondNumberState.data.firstBuffer = '1';
+  enteringSecondNumberState.data.firstOperator = OperatorKeys.PLUS;
+  enteringSecondNumberState.data.secondBuffer = '1';
+  
+  jest.spyOn(enteringSecondNumberState, 'add').mockReturnValue(2);
+
+  enteringSecondNumberState.binaryOperator(OperatorKeys.PLUS);
+
+});
+```
+
+Next, we can add assertions to verify different properties in our test:
+
+```typescript
+it('should convert to 1+1 to 2+ when the next operator is +', (): void => {
+
+  enteringSecondNumberState.data.firstBuffer = '1';
+  enteringSecondNumberState.data.firstOperator = OperatorKeys.PLUS;
+  enteringSecondNumberState.data.secondBuffer = '1';
+  
+  jest.spyOn(enteringSecondNumberState, 'add').mockReturnValue(2);
+
+  enteringSecondNumberState.binaryOperator(OperatorKeys.PLUS);
+
+  expect(enteringSecondNumberState.data.firstBuffer).toEqual('2');
+  expect(enteringSecondNumberState.data.firstOperator).toEqual(OperatorKeys.PLUS);
+  expect(enteringSecondNumberState.data.secondBuffer).toEqual('');
+  expect(enteringSecondNumberState.add).toHaveBeenCalledWith(1, 1);
+
+});
+
+```
+
+Note: We do not need to restore the mock since we do that in `afterEach()`
+```typescript
+afterEach((): void => {
+  jest.restoreAllMocks();
+  enteringSecondNumberState = null;
+  calculatorModel = null;
+  stateData = null;
+});
+```
+
+### Running the tests
 
 You can run the tests with `npm run test` once you add more tests.
-The html report of the coverage can be found at `reports/coverage/lcov-report/index.html` and looks as below:
-![coverage html all](img/coverage-html-all.png)
+You should now see more branches covered and 1 less todo:
 
-You can navigate to different files in the report to see which branches have not been covered yet:
-![coverage html file](img/coverage-html-file.png)
+```
+---------------------------------------|---------|----------|---------|---------|-----------------------
+File                                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+---------------------------------------|---------|----------|---------|---------|-----------------------
+All files                              |   82.59 |    28.15 |   95.55 |   82.53 |
+```
 
+```
+Test Suites: 8 passed, 8 total
+Tests:       1 todo, 70 passed, 71 total
+```
+
+Continue writing tests to get fill credit.
 
 ## Understanding The State Design
 
@@ -96,4 +259,4 @@ Upload the `submission.zip` file to Gradescope and tag your partner on Gradescop
 
 ## Grading
 
-You must write 10 new tests that cover 10 new branches to get full credit.
+You must write 10 new tests that cover 20 new branches to get full credit.

@@ -9,7 +9,7 @@ import { EnteringFirstNumberState } from './entering-first-number.state';
 describe('states', (): void => {
   describe('EnteringThirdNumberState', (): void => {
 
-    let enteringThirdNumberState: ICalculatorState;
+    let enteringThirdNumberState: EnteringThirdNumberState;
     let calculatorModel: IContext;
     let stateData: IStateData;
 
@@ -30,11 +30,11 @@ describe('states', (): void => {
 
       it('should replace firstBuffer with input if firstBuffer is 0', (): void => {
 
-        (<any>enteringThirdNumberState)._data._thirdBuffer = '0';
+        enteringThirdNumberState.data.thirdBuffer = '0';
 
         enteringThirdNumberState.digit(NumericKeys.ONE);
 
-        expect((<any>enteringThirdNumberState)._data._thirdBuffer).toEqual('1');
+        expect(enteringThirdNumberState.data.thirdBuffer).toEqual('1');
 
       });
 
@@ -42,7 +42,7 @@ describe('states', (): void => {
 
         enteringThirdNumberState.digit(NumericKeys.ONE);
 
-        expect((<any>enteringThirdNumberState)._data._thirdBuffer).toEqual('1');
+        expect(enteringThirdNumberState.data.thirdBuffer).toEqual('1');
 
       });
 
@@ -54,27 +54,27 @@ describe('states', (): void => {
 
         enteringThirdNumberState.decimalSeparator();
 
-        expect((<any>enteringThirdNumberState)._data._thirdBuffer).toEqual('.');
+        expect(enteringThirdNumberState.data.thirdBuffer).toEqual('.');
 
       });
 
       it('should add a decimal point at the end of firstBuffer if the buffer is not empty', (): void => {
 
-        (<any>enteringThirdNumberState)._data._thirdBuffer = '12';
+        enteringThirdNumberState.data.thirdBuffer = '12';
 
         enteringThirdNumberState.decimalSeparator();
 
-        expect((<any>enteringThirdNumberState)._data._thirdBuffer).toEqual('12.');
+        expect(enteringThirdNumberState.data.thirdBuffer).toEqual('12.');
 
       });
 
       it('should do nothing if firstBuffer already contains a decinal point', (): void => {
 
-        (<any>enteringThirdNumberState)._data._thirdBuffer = '12.34';
+        enteringThirdNumberState.data.thirdBuffer = '12.34';
 
         enteringThirdNumberState.decimalSeparator();
 
-        expect((<any>enteringThirdNumberState)._data._thirdBuffer).toEqual('12.34');
+        expect(enteringThirdNumberState.data.thirdBuffer).toEqual('12.34');
 
       });
 

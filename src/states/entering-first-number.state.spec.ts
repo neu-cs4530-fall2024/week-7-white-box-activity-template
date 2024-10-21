@@ -8,7 +8,7 @@ import { EnteringFirstNumberState } from './entering-first-number.state';
 describe('states', (): void => {
   describe('EnteringFirstNumberState', (): void => {
 
-    let enteringFirstNumberState: ICalculatorState;
+    let enteringFirstNumberState: EnteringFirstNumberState;
     let calculatorModel: IContext;
     let stateData: IStateData;
 
@@ -29,11 +29,11 @@ describe('states', (): void => {
 
       it('should replace firstBuffer with input if firstBuffer is 0', (): void => {
 
-        (<any>enteringFirstNumberState)._data._firstBuffer = '0';
+        enteringFirstNumberState.data.firstBuffer = '0';
 
         enteringFirstNumberState.digit(NumericKeys.ONE);
 
-        expect((<any>enteringFirstNumberState)._data._firstBuffer).toEqual('1');
+        expect(enteringFirstNumberState.data.firstBuffer).toEqual('1');
 
       });
 
@@ -41,7 +41,7 @@ describe('states', (): void => {
 
         enteringFirstNumberState.digit(NumericKeys.ONE);
 
-        expect((<any>enteringFirstNumberState)._data._firstBuffer).toEqual('1');
+        expect(enteringFirstNumberState.data.firstBuffer).toEqual('1');
 
       });
 
@@ -53,27 +53,27 @@ describe('states', (): void => {
 
         enteringFirstNumberState.decimalSeparator();
 
-        expect((<any>enteringFirstNumberState)._data._firstBuffer).toEqual('.');
+        expect(enteringFirstNumberState.data.firstBuffer).toEqual('.');
 
       });
 
       it('should add a decimal point at the end of firstBuffer if the buffer is not empty', (): void => {
 
-        (<any>enteringFirstNumberState)._data._firstBuffer = '12';
+        enteringFirstNumberState.data.firstBuffer = '12';
 
         enteringFirstNumberState.decimalSeparator();
 
-        expect((<any>enteringFirstNumberState)._data._firstBuffer).toEqual('12.');
+        expect(enteringFirstNumberState.data.firstBuffer).toEqual('12.');
 
       });
 
       it('should do nothing if firstBuffer already contains a decinal point', (): void => {
 
-        (<any>enteringFirstNumberState)._data._firstBuffer = '12.34';
+        enteringFirstNumberState.data.firstBuffer = '12.34';
 
         enteringFirstNumberState.decimalSeparator();
 
-        expect((<any>enteringFirstNumberState)._data._firstBuffer).toEqual('12.34');
+        expect(enteringFirstNumberState.data.firstBuffer).toEqual('12.34');
 
       });
 
@@ -83,7 +83,7 @@ describe('states', (): void => {
 
       it('should transition to EnteringSecondNumberState by invoking context.changeState', (): void => {
 
-        (<any>enteringFirstNumberState)._data._firstBuffer = '1';
+        enteringFirstNumberState.data.firstBuffer = '1';
         jest.spyOn(calculatorModel, 'changeState').mockReturnValue(null);
         const mockData: IStateData = new StateData.Builder().withFirstBuffer('1').withFirstOperator(OperatorKeys.PLUS).build();
 

@@ -1,5 +1,5 @@
 
-import { NumericKeys } from '../enums';
+import { NumericKeys, OperatorKeys } from '../enums';
 import { ICalculatorState, IContext, IStateData } from '../interfaces';
 import { CalculatorModel } from '../models/calculator.model';
 import { StateData } from '../models/state-data.model';
@@ -9,7 +9,7 @@ import { EnteringSecondNumberState } from './entering-second-number.state';
 describe('states', (): void => {
   describe('EnteringSecondNumberState', (): void => {
 
-    let enteringSecondNumberState: ICalculatorState;
+    let enteringSecondNumberState: EnteringSecondNumberState;
     let calculatorModel: IContext;
     let stateData: IStateData;
 
@@ -20,7 +20,7 @@ describe('states', (): void => {
     });
 
     afterEach((): void => {
-      jest.clearAllMocks();
+      jest.restoreAllMocks();
       enteringSecondNumberState = null;
       calculatorModel = null;
       stateData = null;
@@ -30,11 +30,11 @@ describe('states', (): void => {
 
       it('should replace firstBuffer with input if firstBuffer is 0', (): void => {
 
-        (<any>enteringSecondNumberState)._data._secondBuffer = '0';
+        enteringSecondNumberState.data.secondBuffer = '0';
 
         enteringSecondNumberState.digit(NumericKeys.ONE);
 
-        expect((<any>enteringSecondNumberState)._data._secondBuffer).toEqual('1');
+        expect(enteringSecondNumberState.data.secondBuffer).toEqual('1');
 
       });
 
@@ -42,7 +42,7 @@ describe('states', (): void => {
 
         enteringSecondNumberState.digit(NumericKeys.ONE);
 
-        expect((<any>enteringSecondNumberState)._data._secondBuffer).toEqual('1');
+        expect(enteringSecondNumberState.data.secondBuffer).toEqual('1');
 
       });
 
@@ -54,34 +54,51 @@ describe('states', (): void => {
 
         enteringSecondNumberState.decimalSeparator();
 
-        expect((<any>enteringSecondNumberState)._data._secondBuffer).toEqual('.');
+        expect(enteringSecondNumberState.data.secondBuffer).toEqual('.');
 
       });
 
       it('should add a decimal point at the end of firstBuffer if the buffer is not empty', (): void => {
 
-        (<any>enteringSecondNumberState)._data._secondBuffer = '12';
+        enteringSecondNumberState.data.secondBuffer = '12';
 
         enteringSecondNumberState.decimalSeparator();
 
-        expect((<any>enteringSecondNumberState)._data._secondBuffer).toEqual('12.');
+        expect(enteringSecondNumberState.data.secondBuffer).toEqual('12.');
 
       });
 
       it('should do nothing if firstBuffer already contains a decinal point', (): void => {
 
-        (<any>enteringSecondNumberState)._data._secondBuffer = '12.34';
+        enteringSecondNumberState.data.secondBuffer = '12.34';
 
         enteringSecondNumberState.decimalSeparator();
 
-        expect((<any>enteringSecondNumberState)._data._secondBuffer).toEqual('12.34');
+        expect(enteringSecondNumberState.data.secondBuffer).toEqual('12.34');
 
       });
 
     });
 
     describe('binaryOperator()', (): void => {
-      it.todo('should do something');
+    
+      it('should convert to 1+1 to 2+ when the next operator is +', (): void => {
+
+        enteringSecondNumberState.data.firstBuffer = '1';
+        enteringSecondNumberState.data.firstOperator = OperatorKeys.PLUS;
+        enteringSecondNumberState.data.secondBuffer = '1';
+        
+        jest.spyOn(enteringSecondNumberState, 'add').mockReturnValue(2);
+
+        enteringSecondNumberState.binaryOperator(OperatorKeys.PLUS);
+
+        expect(enteringSecondNumberState.data.firstBuffer).toEqual('2');
+        expect(enteringSecondNumberState.data.firstOperator).toEqual(OperatorKeys.PLUS);
+        expect(enteringSecondNumberState.data.secondBuffer).toEqual('');
+        expect(enteringSecondNumberState.add).toHaveBeenCalledWith(1, 1);
+
+      });
+    
     });
 
     describe('equals()', (): void => {
